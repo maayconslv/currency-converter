@@ -1,6 +1,7 @@
 package api;
 
 import api.dto.ExchangeRateApiResponse;
+import api.exceptions.InvalidCurrencyException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -17,7 +18,13 @@ public class ExchangeRateApiClient {
         String response = this.privateRequest(baseCurrency);
         Gson gson = new GsonBuilder().create();
 
-        return gson.fromJson(response, ExchangeRateApiResponse.class);
+        ExchangeRateApiResponse result = gson.fromJson(response, ExchangeRateApiResponse.class);
+
+        if(result.conversion_rates() == null) {
+            throw new InvalidCurrencyException("Não há taxas disponiveis para a moeda base");
+        }
+
+        return result;
     }
 
     private String privateRequest(String baseCurrency) throws IOException, InterruptedException {
