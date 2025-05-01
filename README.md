@@ -1,4 +1,7 @@
-# Currency Converter (Conversor de Moedas)
+<h1>
+  <img src="./Badge-Conversor.png" alt="Logo" width="70" style="vertical-align: middle; margin-right: 10px;">
+  Currency Converter (Conversor de Moedas)
+</h1>
 
 > Projeto simples de conversão de moedas via API externa.
 
@@ -46,6 +49,7 @@ Siga os passos abaixo para rodar o projeto localmente:
 
 - **Java** – Linguagem principal do projeto
 - **Gson** – Biblioteca para serialização e desserialização de JSON
+- **Dotenv** - Biblioteca para configurar variaveis ambiente
 
 ---
 
