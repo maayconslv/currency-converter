@@ -39,8 +39,15 @@ Siga os passos abaixo para rodar o projeto localmente:
       ```
 4. **Compile e rode**:
    ```bash
-   javac -d out src/*.java
-   java -cp out Main
+   javac -cp "libs/*" -d out $(find src -name "*.java")
+   ```
+5. **Execute o projeto**:
+   ```bash
+   java -cp "out:libs/*" Main
+   ```
+   > Se estiver usando Windows, use ; no lugar de `:`:
+   ```bash
+   java -cp "out;libs/*" Main
    ```
 
 ---
