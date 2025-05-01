@@ -4,6 +4,7 @@ import api.dto.ExchangeRateApiResponse;
 import api.exceptions.InvalidCurrencyException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -14,6 +15,24 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class ExchangeRateApiClient {
+    private final String baseUrl;
+    private final String apiKey;
+
+    public ExchangeRateApiClient() {
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+
+        this.baseUrl = dotenv.get("EXCHANGE_RATE_API_BASE_URL");
+        this.apiKey = dotenv.get("EXCHANGE_RATE_API_KEY");
+
+        if (baseUrl == null | apiKey == null) {
+            throw new IllegalStateException(
+                    "Variáveis de ambiente obrigatórias não encontradas: " +
+                    "EXCHANGE_RATE_API_BASE_URL e/ou EXCHANGE_RATE_API_KEY. " +
+                    "Confira a configuração em: https://github.com/maayconslv/currency-converter"
+            );
+        }
+    }
+
     public ExchangeRateApiResponse request(String baseCurrency) throws IOException, InterruptedException {
         String response = this.privateRequest(baseCurrency);
         Gson gson = new GsonBuilder().create();
@@ -28,11 +47,11 @@ public class ExchangeRateApiClient {
     }
 
     private String privateRequest(String baseCurrency) throws IOException, InterruptedException {
-        String url_str = "https://v6.exchangerate-api.com/v6/edf5b6c3d6d1db529e38cfd1/latest/" + baseCurrency;
+        String urlString = this.baseUrl + "/" + this.apiKey + "/latest/" + baseCurrency;
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url_str))
+                .uri(URI.create(urlString))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
