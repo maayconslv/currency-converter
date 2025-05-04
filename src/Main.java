@@ -20,29 +20,81 @@ public class Main {
     }
 
     private static void execConversion(Scanner scanner) {
-        System.out.println("Qual moeda você quer usar como base? Use o formato BRL, USD...");
-        String baseCurrencyCode = scanner.next();
+        ExchangeRateApiClient api = new ExchangeRateApiClient();
+        ExchangeRateApiResponse response;
+
+        String baseCurrencyCode;
+        while(true) {
+            System.out.println("Qual moeda você quer usar como base? Use o formato BRL, USD...");
+            System.out.println("Digite 1 para listar todas as moedas disponíveis.");
+
+            baseCurrencyCode = scanner.next().toUpperCase();
+
+            if (baseCurrencyCode.equals("1")) {
+                System.out.println("buscando a lista de moedas...");
+                try {
+                    response = api.request("USD");
+                    System.out.println("Moedas disponíveis:");
+                    for (String currency : response.conversion_rates().keySet()) {
+                        System.out.print(currency + " ");
+                    }
+                    System.out.println("\n");
+                    System.out.println("Agora, informe novamente a moeda base:");
+                    baseCurrencyCode = scanner.next().toUpperCase();
+                } catch (Exception e) {
+                    System.out.println("Erro ao obter a lista de moedas: "  + e);
+                    return;
+                }
+            }
+
+            try {
+                System.out.println("moeda base escolhida foi: " + baseCurrencyCode);
+                break;
+            } catch (Exception e) {
+                System.out.println("Moeda inválida ou erro ao buscar dados. Tente novamente.");
+            }
+        }
 
         System.out.println("Qual o valor você deseja converter?");
         double amountToConvert = scanner.nextDouble();
 
-        System.out.println("Para qual moeda você quer converter? Use o formato BRL, USD...");
-        String targetCurrencyCode = scanner.next();
+        String targetCurrencyCode;
+        while (true) {
+            System.out.println("Para qual moeda você quer converter?");
+            System.out.println("Digite 1 para listar todas as moedas disponíveis.");
 
-        try {
-            ExchangeRateApiClient api = new ExchangeRateApiClient();
-            ExchangeRateApiResponse response = api.request(baseCurrencyCode);
-
-            if (!validateConversionRates(response, targetCurrencyCode)) {
-                return;
+            targetCurrencyCode = scanner.next().toUpperCase();
+            if (targetCurrencyCode.equals("1")) {
+                try {
+                    response = api.request("USD");
+                    System.out.println("Moedas disponíveis:");
+                    for (String currency : response.conversion_rates().keySet()) {
+                        System.out.print(currency + " ");
+                    }
+                    System.out.println("\n");
+                    System.out.println("Agora, informe novamente a moeda para qual você quer converter:");
+                    targetCurrencyCode = scanner.next().toUpperCase();
+                } catch (Exception e) {
+                    System.out.println("Erro ao obter a lista de moedas: "  + e);
+                    return;
+                }
             }
 
-            double exchangeRate = response.conversion_rates().get(targetCurrencyCode);
-            CurrencyConverter currency = new CurrencyConverter();
+            try {
+                response = api.request(baseCurrencyCode);
 
-            currency.printConvertion(amountToConvert, exchangeRate, baseCurrencyCode, targetCurrencyCode);
-        } catch (Exception e) {
-            System.out.println("Erro ao realizar a conversão: " + e.getMessage());
+                if (!validateConversionRates(response, targetCurrencyCode)) {
+                    return;
+                }
+
+                double exchangeRate = response.conversion_rates().get(targetCurrencyCode);
+                CurrencyConverter currency = new CurrencyConverter();
+
+                currency.printConvertion(amountToConvert, exchangeRate, baseCurrencyCode, targetCurrencyCode);
+                break;
+            } catch (Exception e) {
+                System.out.println("Erro ao realizar a conversão: " + e.getMessage());
+            }
         }
     }
 
