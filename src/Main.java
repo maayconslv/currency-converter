@@ -25,33 +25,33 @@ public class Main {
 
         String baseCurrencyCode;
         while(true) {
-            System.out.println("Qual moeda você quer usar como base? Use o formato BRL, USD...");
-            System.out.println("Digite 1 para listar todas as moedas disponíveis.");
+            System.out.println("\uD83C\uDF0D Qual moeda você quer usar como base? Use o formato BRL, USD...");
+            System.out.println("\uD83D\uDCDC Digite 1 para listar todas as moedas disponíveis.");
 
             baseCurrencyCode = scanner.next().toUpperCase();
 
             if (baseCurrencyCode.equals("1")) {
-                System.out.println("buscando a lista de moedas...");
+                System.out.println("\uD83D\uDD04 buscando a lista de moedas...");
                 try {
                     response = api.request("USD");
-                    System.out.println("Moedas disponíveis:");
+                    System.out.println("\uD83D\uDCB1 Moedas disponíveis:");
                     for (String currency : response.conversion_rates().keySet()) {
                         System.out.print(currency + " ");
                     }
                     System.out.println("\n");
-                    System.out.println("Agora, informe novamente a moeda base:");
+                    System.out.println("\uD83D\uDCE5 Agora, informe novamente a moeda base:");
                     baseCurrencyCode = scanner.next().toUpperCase();
                 } catch (Exception e) {
-                    System.out.println("Erro ao obter a lista de moedas: "  + e);
+                    System.out.println("❌ Erro ao obter a lista de moedas: "  + e);
                     return;
                 }
             }
 
             try {
-                System.out.println("moeda base escolhida foi: " + baseCurrencyCode);
+                System.out.println("✅ moeda base escolhida foi: " + baseCurrencyCode);
                 break;
             } catch (Exception e) {
-                System.out.println("Moeda inválida ou erro ao buscar dados. Tente novamente.");
+                System.out.println("⚠\uFE0F Moeda inválida ou erro ao buscar dados. Tente novamente.");
             }
         }
 
@@ -66,13 +66,15 @@ public class Main {
             targetCurrencyCode = scanner.next().toUpperCase();
             if (targetCurrencyCode.equals("1")) {
                 try {
+                    System.out.println("\uD83D\uDD04 buscando a lista de moedas...");
                     response = api.request("USD");
+
                     System.out.println("Moedas disponíveis:");
                     for (String currency : response.conversion_rates().keySet()) {
                         System.out.print(currency + " ");
                     }
                     System.out.println("\n");
-                    System.out.println("Agora, informe novamente a moeda para qual você quer converter:");
+                    System.out.println("\uD83D\uDCE5 Agora, informe novamente a moeda para qual você quer converter:");
                     targetCurrencyCode = scanner.next().toUpperCase();
                 } catch (Exception e) {
                     System.out.println("Erro ao obter a lista de moedas: "  + e);
