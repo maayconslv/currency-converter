@@ -1,4 +1,4 @@
-<h1>
+****<h1>
   <img src="./Badge-Conversor.png" alt="Logo" width="40" style="vertical-align: middle; margin-right: 10px;">
   Currency Converter (Conversor de Moedas)
 </h1>
@@ -62,7 +62,7 @@ Siga os passos abaixo para rodar o projeto localmente:
 
 ## 🎓 Desafio
 
-Este projeto foi desenvolvido como parte de um desafio da __Next One Education__, em parceria com a Oracle e a Alura.
+Este projeto foi desenvolvido como parte de um desafio da __Oracle Next Education__, em parceria com a Oracle e a Alura.
 
 ---
 
